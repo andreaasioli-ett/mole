@@ -1,6 +1,7 @@
 use std::env;
 use std::io;
 use std::io::Write;
+use std::fs;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -25,9 +26,11 @@ fn run_prompt(){
         
         io::stdin()
             .read_line(&mut line)
-            .expect("Failed to read line");
+            .expect("failed to read line");
+
+        line.truncate(line.len() - 1);
     
-        if  line.to_lowercase() == "exit\n"{
+        if  line.to_lowercase() == "exit"{
             break;
         } else if line != ""{
             scan(line)
@@ -42,6 +45,12 @@ fn run_prompt(){
 
 fn run_file(path: &String){
     println!("file path {}", path);
+
+    let contents = fs::read_to_string(path)
+        .expect("Should have been able to read the file");
+
+    println!("{}", contents);
+
 }
 
 fn scan(script: String){
