@@ -6,13 +6,12 @@ use std::fs;
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    if args.len() > 2 {
-        println!("too many params");
-    } else if args.len() == 2 {
-        run_file(&args[1]);
-    } else {
-        run_prompt();
+    match args.len() {
+        key if key > 2 => println!("too many params"),
+        2                     => run_file(&args[1]),
+        _                     => run_prompt()
     }
+
 }
 
 fn run_prompt(){
@@ -29,13 +28,11 @@ fn run_prompt(){
             .expect("failed to read line");
 
         line.truncate(line.len() - 1);
-    
-        if  line.to_lowercase() == "exit"{
-            break;
-        } else if line != ""{
-            scan(line)
-        } else {
-            continue;
+
+        match line{
+            key if key.to_lowercase() == "exit" => break,
+            key if key != ""                    => scan(key),
+            _                                           => continue
         }
         
     }
@@ -44,7 +41,6 @@ fn run_prompt(){
 }
 
 fn run_file(path: &String){
-    println!("file path {}", path);
 
     let contents = fs::read_to_string(path)
         .expect("Should have been able to read the file");
